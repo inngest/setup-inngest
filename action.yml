@@ -1,4 +1,4 @@
-me: Set up Inngest CLI
+name: Set up Inngest CLI
 author: Inngest
 description: |-
   Downloads, installs, and configures the Inngest CLI.
