@@ -51,7 +51,7 @@ runs:
     # long-lived API key.
     - id: echo-version-cmd
       if: runner.os == 'Windows'
-      run: FOR /F %A IN ('inngest version') DO echo ::set-output name=version::%~A
+      run: FOR /F %A IN ('inngest version') DO echo ::set-output name=version::%%~A
       shell: cmd
     - id: echo-version-bash
       if: runner.os != 'Windows'
