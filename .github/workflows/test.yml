@@ -9,21 +9,30 @@ jobs:
     name: Installs CLI on ${{ matrix.os }}
     strategy:
       matrix:
+        # TODO: Test that Git Bash also works on Windows
         os: [ubuntu-latest, windows-latest, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
+
       - id: action
         uses: ./
-      - run: which inngest
-        if: matrix.os != 'windows-latest'
+
+        # Show the installed location
+      - if: matrix.os != 'windows-latest'
+        run: which inngest
         shell: bash
-      - run: where inngest
-        if: matrix.os == 'windows-latest'
+      - if: matrix.os == 'windows-latest'
+        run: where inngest
         shell: cmd
-      - run: inngest version
+
+        # Ensure the CLI works by calling `inngest version`
+      - if: matrix.os != 'windows-latest'
+        run: inngest version
         shell: bash
-        if: matrix.os != 'windows-latest'
+      - if: matrix.os == 'windows-latest'
+        run: inngest version
+        shell: cmd
+
+        # Ensure the step output was given
       - run: echo ${{ steps.action.outputs.version }}
-        shell: cmd
-        if: matrix.os == 'windows-latest'
