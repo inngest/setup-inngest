@@ -27,7 +27,7 @@ outputs:
       The version of the Inngest CLI that was installed. Useful if the version
       input was set to "latest" and you need to see which version was actually
       installed.
-    value: ${{ steps.echo-version.outputs.version }}
+    value: ${{ steps.echo-version-bash.outputs.version || steps.echo-version-cmd.outputs.version }}
 
 branding:
   icon: terminal
@@ -49,11 +49,11 @@ runs:
     # TODO: Log in here if key in inputs
     # This also requires the ability for `inngest login` to auth with a
     # long-lived API key.
-    - id: echo-version
+    - id: echo-version-cmd
       if: runner.os == 'Windows'
       run: FOR /F %A IN ('inngest version') DO echo ::set-output name=version::%~A
       shell: cmd
-    - id: echo-version
+    - id: echo-version-bash
       if: runner.os != 'Windows'
       run: echo "::set-output name=version::$(inngest version)"
       shell: bash
