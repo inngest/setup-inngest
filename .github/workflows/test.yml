@@ -20,6 +20,8 @@ jobs:
       - run: where inngest
         if: ${{ matrix.os }} == 'windows-latest'
       - run: inngest version
-        shell: ${{ matrix.os == 'windows-latest' && 'cmd' || 'bash' }}
+        shell: bash
+        if: ${{ matrix.os }} != 'windows-latest'
       - run: echo ${{ steps.action.outputs.version }}
-        shell: ${{ matrix.os == 'windows-latest' && 'cmd' || 'bash' }}
+        shell: cmd
+        if: ${{ matrix.os }} == 'windows-latest'
