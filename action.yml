@@ -53,6 +53,7 @@ runs:
       if: runner.os == 'Windows'
       run: FOR /F %A IN ('inngest version') DO echo ::set-output name=version::%~A
       shell: cmd
-    - id: echo "::set-output name=version::$(inngest version)"
+    - id: echo-version
       if: runner.os != 'Windows'
+      run: echo "::set-output name=version::$(inngest version)"
       shell: bash
