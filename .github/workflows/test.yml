@@ -27,6 +27,8 @@ jobs:
         shell: cmd
 
         # Ensure the CLI works by calling `inngest version`
+        # TODO: Two birds with one stone - run `inngest version` and check that
+        # the output matches the output version of the action
       - if: matrix.os != 'windows-latest'
         run: inngest version
         shell: bash
