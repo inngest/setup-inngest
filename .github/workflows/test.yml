@@ -9,8 +9,27 @@ jobs:
     name: Installs CLI on ${{ matrix.os }}
     strategy:
       matrix:
-        # TODO: Test that Git Bash also works on Windows
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        # Windows bash is Windows using "Git Bash", a bash emulation used to run
+        # Git from the command line.
+        #
+        # This is hard to cater for as it mimics bash (and so will target unix
+        # files to run instead of `.cmd` or `.ps1` files), but the platform
+        # still shows as Windows, meaning our install scripts still fetch the
+        # Windows build.
+        #
+        # This is a common problem if trying to use Git Bash to develop with,
+        # but one that we can likely push users towards some manual download
+        # steps for that particular arrangement and mention that WSL is
+        # preferred.
+        include:
+          - os: ubuntu-latest
+            shell: bash
+          - os: macos-latest
+            shell: bash
+          - os: windows-latest
+            shell: pwsh
+          - os: windows-latest
+            shell: cmd
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
@@ -18,23 +37,38 @@ jobs:
       - id: action
         uses: ./
 
+        # Ensure the step output was given
+      - run: echo ${{ steps.action.outputs.version }}
+
         # Show the installed location
       - if: matrix.os != 'windows-latest'
         run: which inngest
         shell: bash
-      - if: matrix.os == 'windows-latest'
+      - if: matrix.os == 'windows-latest' && matrix.shell == 'cmd'
         run: where inngest
         shell: cmd
+      - if: matrix.os == 'windows-latest' && matrix.shell == 'pwsh'
+        run: Get-Command inngest
+        shell: pwsh
 
         # Ensure the CLI works by calling `inngest version`
         # TODO: Two birds with one stone - run `inngest version` and check that
         # the output matches the output version of the action
       - if: matrix.os != 'windows-latest'
-        run: inngest version
+        run: |
+          version=$(inngest version)
+
+          if [[ $version == "${{ steps.action.outputs.version }}" ]]; then
+            exit 0
+          else
+            exit 1
+          fi
         shell: bash
-      - if: matrix.os == 'windows-latest'
+        # TODO Check this matches the output version of the action
+      - if: matrix.os == 'windows-latest' && matrix.shell == 'cmd'
         run: inngest version
         shell: cmd
-
-        # Ensure the step output was given
-      - run: echo ${{ steps.action.outputs.version }}
+        # TODO Check this matches the output version of the action
+      - if: matrix.os == 'windows-latest' && matrix.shell == 'pwsh'
+        run: inngest version
+        shell: pwsh
