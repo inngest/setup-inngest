@@ -6,7 +6,7 @@ on:
 
 jobs:
   test:
-    name: Installs CLI on ${{ matrix.os }}
+    name: Installs CLI on ${{ matrix.os }}/${{ matrix.shell }}
     strategy:
       matrix:
         # Windows bash is Windows using "Git Bash", a bash emulation used to run
