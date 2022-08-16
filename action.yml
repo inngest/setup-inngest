@@ -14,10 +14,10 @@ inputs:
       Example: "latest" or "1.5.2"
     required: false
     default: latest
-  key:
+  token:
     description: |-
-      An API key which, if given, will be used to authenticate with the Inngest
-      CLI using `inngest login`.
+      An auth token which, if given, will be used to authenticate with the
+      Inngest CLI using `inngest login`.
     required: false
     default: ""
 
@@ -30,8 +30,8 @@ outputs:
     value: ${{ steps.echo-version-bash.outputs.version || steps.echo-version-cmd.outputs.version }}
 
 branding:
-  icon: terminal
-  color: blue
+  icon: more-horizontal
+  color: purple
 
 runs:
   using: composite
@@ -46,8 +46,8 @@ runs:
         node-version: 16
     - run: npm i -g inngest-cli@${{ inputs.version }}
       shell: ${{ runner.os == 'Windows' && 'cmd' || 'bash' }}
-    - if: inputs.key != ''
-      run: inngest login --token ${{ inputs.key }}
+    - if: inputs.token != ''
+      run: inngest login --token ${{ inputs.token }}
       shell: ${{ runner.os == 'Windows' && 'cmd' || 'bash' }}
     - id: echo-version-cmd
       if: runner.os == 'Windows'
