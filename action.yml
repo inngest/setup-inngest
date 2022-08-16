@@ -46,9 +46,9 @@ runs:
         node-version: 16
     - run: npm i -g inngest-cli@${{ inputs.version }}
       shell: ${{ runner.os == 'Windows' && 'cmd' || 'bash' }}
-    # - if: inputs.token != ''
-    #   run: inngest login --token ${{ inputs.token }}
-    #   shell: ${{ runner.os == 'Windows' && 'cmd' || 'bash' }}
+    - if: inputs.token != ''
+      run: inngest login --token ${{ inputs.token }}
+      shell: ${{ runner.os == 'Windows' && 'cmd' || 'bash' }}
     - id: echo-version-cmd
       if: runner.os == 'Windows'
       run: FOR /F %%A IN ('inngest version') DO echo ::set-output name=version::%%~A
