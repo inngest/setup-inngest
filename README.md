@@ -14,10 +14,9 @@ steps:
   - uses: actions/checkout@v3
   - uses: inngest/setup-inngest@v1
     with:
-      version: 0.5.2
-      key: ${{ secrets.INNGEST_API_KEY }}
+      token: ${{ secrets.INNGEST_AUTH_TOKEN }}
 ```
 
-The `version` input is optional. If not supplied, the `"latest"` version will be used.
+An additional `version` input is optional. If not supplied, the `"latest"` version will be used. If supplied, it should be a semver version number such as `0.5.2`.
 
-The `key` input is also optional. If supplied, we'll log in to the CLI for you (synonymous with using `inngest login --token [key]`). This is useful if you wish to perform authenticated commands with the CLI, like [deploying functions](https://github.com/inngest/action-deploy-functions) or [testing against production data](https://github.com/inngest/action-test-functions).
+The `token` input is also optional. If supplied, we'll log in to the CLI for you (synonymous with using `inngest login --token`). This is useful if you wish to perform authenticated commands with the CLI, like [deploying functions](https://github.com/inngest/action-deploy-functions) or [testing against production data](https://github.com/inngest/action-test-functions).
