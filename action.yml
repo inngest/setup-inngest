@@ -30,8 +30,8 @@ outputs:
     value: ${{ steps.echo-version-bash.outputs.version || steps.echo-version-cmd.outputs.version }}
 
 branding:
-  icon: terminal
-  color: blue
+  icon: more-horizontal
+  color: purple
 
 runs:
   using: composite
